@@ -17,12 +17,13 @@
 
 using TouchPoint = ThreshPoint<ThVec3f>;
 using TouchPointSource = PointSource<TouchPoint>;
+using namespace TD;
 
-class OP_CHOPInput;
+//class OP_CHOPInput;
 
 class CHOPInputPointSet : public TouchPointSource {
 public:
-  CHOPInputPointSet(const OP_CHOPInput* inputs,
+  CHOPInputPointSet(const TD::OP_CHOPInput* inputs,
                     int xI, int yI, int zI, int gI = -1)
   : _inputs(inputs)
   , _xInputIndex(xI), _yInputIndex(yI) , _zInputIndex(zI)
@@ -37,7 +38,7 @@ private:
   int _yInputIndex;
   int _zInputIndex;
   int _groupInputIndex;
-  const OP_CHOPInput* _inputs;
+  const TD::OP_CHOPInput* _inputs;
 };
 
 template<std::size_t RowCount, std::size_t BufferSize = 4096>

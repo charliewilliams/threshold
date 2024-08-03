@@ -14,11 +14,14 @@
 #include <utility>
 
 #include "ChopCPP_wrapper.h"
+#include "CHOP_CPlusPlusBase.h"
 
 #include "Thresholder.h"
 #include "TouchCommon.h"
 #include "PointSet.h"
 #include "LineSet.h"
+
+using namespace TD;
 
 typedef std::pair<int, int> IndexPair;
 
@@ -40,38 +43,19 @@ class ThresholderCHOP : public CHOP_CPlusPlusBase {
   //  NUM_INFO_ROWS
   //};
 public:
-  explicit ThresholderCHOP(const OP_NodeInfo* info);
+  explicit ThresholderCHOP(const TD::OP_NodeInfo* info);
   virtual ~ThresholderCHOP() {}
+    
+    virtual void        getGeneralInfo(CHOP_GeneralInfo*, const TD::OP_Inputs*, void*) override;
+    virtual bool        getOutputInfo(CHOP_OutputInfo*, const TD::OP_Inputs*, void*) override;
+    virtual void        getChannelName(int32_t index, OP_String *name, const TD::OP_Inputs*, void*) override;
 
-  virtual void		getGeneralInfo(CHOP_GeneralInfo*) override;
-  virtual bool		getOutputInfo(CHOP_OutputInfo*) override;
-  virtual const char* getErrorString() override {
-    if (_error.empty()) {
-      return nullptr;
-    }
-    return _error.c_str();
-  }
-  virtual const char* getWarningString() override {
-    if (_warning.empty()) {
-      return nullptr;
-    }
-    return _warning.c_str();
-  }
-  virtual const char* getInfoPopupString() override {
-    if (_info.empty()) {
-      return nullptr;
-    }
-    return _info.c_str();
-  }
+    virtual void        execute(CHOP_Output*, const TD::OP_Inputs*, void*) override;
 
-  virtual const char*	getChannelName(int index, void* reserved) override;
+    virtual void        setupParameters(OP_ParameterManager* manager, void*) override;
 
-  virtual void		execute(const CHOP_Output*,
-    OP_Inputs*,
-    void* reserved) override;
-
-  virtual void		setupParameters(OP_ParameterManager* manager) override;
-  virtual void		pulsePressed(const char* name) override;
+  virtual void		pulsePressed(const char* name, void* reserved1) override;
+    
 private:
   void loadParameters(OP_Inputs* inputs);
   bool shouldLoadChannels(OP_Inputs* inputs) const;

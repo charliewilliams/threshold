@@ -17,6 +17,8 @@
 #include "Line.h"
 #include "TouchCommon.h"
 
+#include "CHOP_CPlusPlusBase.h"
+
 enum {
   OUT_INDEX1,
   OUT_INDEX2,
@@ -508,3 +510,30 @@ void ThresholderCHOP::pulsePressed(const char* name) {
   }
 }
 
+extern "C"
+{
+DLLEXPORT
+void FillCHOPPluginInfo(CHOP_PluginInfo* info)
+{
+    info->apiVersion = CHOPCPlusPlusAPIVersion;
+    info->customOPInfo.opType = (OP_String *)"Cppplexus";
+    info->customOPInfo.authorName = (OP_String *)"Me";
+    info->customOPInfo.authorEmail = (OP_String *)"c@harl.ie";
+    info->customOPInfo.majorVersion = 1;
+    info->customOPInfo.minorVersion = 0;
+    info->customOPInfo.minInputs = 1;
+    info->customOPInfo.maxInputs = 2;
+}
+
+DLLEXPORT
+CHOP_CPlusPlusBase* CreateCHOPInstance(const OP_NodeInfo* info)
+{
+    return new ThresholderCHOP(info);
+}
+
+DLLEXPORT
+void DestroyCHOPInstance(CHOP_CPlusPlusBase* instance)
+{
+    delete (ThresholderCHOP*)instance;
+}
+}
